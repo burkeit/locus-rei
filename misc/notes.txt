@@ -1,0 +1,97 @@
+Goal: a web app which can be used with barcode scanners to easily
+track the movements and locations of barcoded objects during a move
+between buildings.
+
+Design notes:
+
+Everything is a "Thing". Things can be Objects, Locations, People,
+Departments. Every Thing has a barcode label and a location, even if
+that location is "Unknown".
+
+For Objects, we care about:
++ What department owns it
++ What its display name is (optional)
++ If it has a catalog ID different from its barcode, for whatever reason,
+  what that ID is (optional)
+
+For Departments, we care about:
++ Name
++ Person ultimately responsible for that department 
+  (maybe used for email alerts for triggered conditions?)
+
+For People, we care about:
++ Name 
++ Email
++ Department (primary only; maybe to mail department heads?)
++ PIN (minimal security; make sure to use ssl)
+
+For Locations, we care about:
++ What type (box, drawer, shelf, cabinet, room, etc) it is
++ Address? (optional; maybe for objects on loan?)
+
+We should be able to place an Object with a Person (in transit,
+research, whatever), a Location, or another Object (series of nesting
+baskets, each with its own tag?). We should be able to place a
+Location in another Location only. I don't think we should be able to
+place an object in a Department directly, since each already has a
+departmental owner.
+
+
+Back-end actions:
+
++ Create thing
++ Dectivate thing 
+  (Not delete; just flag as inactive so history stays around)
++ Activate thing 
+  (if it was lost and deactivated, then found again?)
++ Move thing to other thing
+  This handles both check-in and check-out, since check-out is really just
+  "move object to self". In the interface, we probably want in/out, though.
++ Authenticate person
+
+
+Front-end actions:
+
++ Check <thing> out to me
++ Check <thing> in to <thing>
++ Create <thing>
++ Activate <thing>
++ Deactivate <thing> 
++ Query location of <thing>
++ Begin batch
++ End batch
+
+Batches:
+
++ Check out (for grabbing a bunch of things to put on a non-tracked 
+  cart in order to move)
++ Check in to <thing> (boxing/unboxing)
+
+Errors:
+
++ checkin/move to a department
++ moving a thing to another thing contained within itself
++ moving a thing to itself
++ ?
+
+Warnings requiring confirmation:
+
++ checkin/move to person other than self
++ action when thing is checked out to person other than self
++ action when thing is owned by a different department than self?
+  Maybe that could be a per-session thing.
++ ?
+
+
+For all actions, we want to store:
++ timestamp
++ who did the action
++ what they did
++ what they did it to (object)
++ what the target (destination) was
++ whether confirmation was required 
+  don't store/execute an action if it required but didn't get confirmation
+  NB: do I really care about this?
++ optional text notes
++ optional binary attachment(s?)
+
