@@ -88,10 +88,6 @@ For all actions, we want to store:
 + who did the action
 + what they did
 + what they did it to (object)
-+ what the target (destination) was
-+ whether confirmation was required 
-  don't store/execute an action if it required but didn't get confirmation
-  NB: do I really care about this?
++ what the target (destination thing) was
 + optional text notes
 + optional binary attachment(s?)
-
