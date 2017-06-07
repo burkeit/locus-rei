@@ -91,3 +91,19 @@ For all actions, we want to store:
 + what the target (destination thing) was
 + optional text notes
 + optional binary attachment(s?)
+
+
+Barcodes should be in the format:
+
+^LR:{locus-rei barcode}^{optional db-specific barcode}
+
++ locus-rei will look for the ^LR:(.*?)^
++ scanboard will be set to filter to the right of "^" twice, providing just
+  the optional db-specific code. This means codes should duplicate information:
+
+^LR:123456^123456
+
+  for example, if there's no db-specific code
++ This will allow scanboard to be used with databases with their own barcodes
+  and webhub with locus-rei, without having to print a sticker for each system.
+
